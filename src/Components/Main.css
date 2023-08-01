@@ -1,0 +1,19 @@
+.search{
+    margin-top: 30px;
+}
+
+.details{
+    padding:50px;
+    padding-top:20px;
+    height: 450px;
+    color:white;
+}
+
+.info{
+    display: flex;
+    justify-content: center;
+}
+
+.info > *{
+    margin:10px;
+}

@@ -1,0 +1,27 @@
+.header{
+    border-bottom: 1px solid #1DB954;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.head-items{
+    padding-left:30px;
+    display:flex;
+    align-items: center;
+}
+.head-items > h1{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left:10px;
+    font-size: 20px;
+    font-style: bold;
+    color: #1DB954;
+    user-select: none;
+}
+.link{
+    padding-right:30px;
+}
+
+.logo{
+    width:35px;
+}
