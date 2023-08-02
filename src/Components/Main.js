@@ -17,7 +17,6 @@ function Main() {
           clearable
           underlined
           labelPlaceholder="Search"
-          initialValue="NextUI"
           status="success"
           width="500px"
         />
