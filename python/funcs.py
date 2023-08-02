@@ -1,8 +1,11 @@
+from flask import Flask, request, jsonify
 import json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from youtube_search import YoutubeSearch
 import yt_dlp
+
+app = Flask(__name__)
 
 client_id="8ecad3e814e64a80861d1b09aaeb59ed"
 client_secret="1acef6001eb64d1980d1749c71005977"
@@ -12,15 +15,21 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                redirect_uri="http://localhost:8888/callback",
                                                scope="user-library-read"))
 
-
 def get_artist_id(artistName: str):
     """This function retrieves artist's ID"""
     searchID = sp.search(q='artist:' + artistName, type='artist')
     ID = searchID['artists']['items'][0]['id']
     return ID
 
+# @app.route("/<artist>")
+# def get_artist_id(artist):
+#     searchID = sp.search(q='artist:' + artist, type='artist')
+#     ID = searchID['artists']['items'][0]['id']
+#     if ID:
+#         return jsonify(ID), 200
 
-def get_album(artist: str, album: str):
+@app.route("/Albums/<artist>/<album>")
+def get_album(artist, album):
     """This function retrieves songs from an album"""
     ID = get_artist_id(artist)
     results = sp.artist_albums(ID, album_type='album')
@@ -28,18 +37,21 @@ def get_album(artist: str, album: str):
     for x in albums:
         if x['name'] == album:
             tracks = sp.album_tracks(x['id'])
-            for track in tracks['items']:
-                print(json.dumps(track))
+            return jsonify(tracks)
+            # for track in tracks['items']:
+            #     return jsonify(track)
 
 
-def get_song(artist: str, song: str):
+@app.route("/Songs/<artist>/<song>")
+def get_song(artist, song):
     """This function retrieves a song"""
     q = f"artist:{artist} track:{song}"
     results = sp.search(q=q, type='track')
     tracks = results['tracks']['items']
-    print(tracks)
-    for track in tracks:
-        print(track['artists'][0]['name'] + ' - ' + track['name'])
+    return jsonify(tracks)
+    # print(tracks)
+    # for track in tracks:
+    #     print(track['artists'][0]['name'] + ' - ' + track['name'])
 
 def download_song(artist: str, song: str):
     results = YoutubeSearch(f"{artist} - {song}", max_results=1).to_dict()
@@ -58,4 +70,5 @@ def download_song(artist: str, song: str):
         ydl.download([best_url])
 
 
-download_song("Logic", "Heard Em Say")
+if __name__ == "__main__":
+    app.run(debug=True)

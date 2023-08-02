@@ -5,6 +5,11 @@
     justify-content: space-between;
 }
 
+.background-img{
+    width:1000px;
+    position:absolute;
+}
+
 .head-items{
     padding-left:30px;
     display:flex;
