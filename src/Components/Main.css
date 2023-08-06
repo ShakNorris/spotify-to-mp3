@@ -17,3 +17,30 @@
 .info > *{
     margin:10px;
 }
+
+.albums{
+    padding:20px;
+}
+
+.album_details{
+    display:inline-block;
+    padding:20px;
+    cursor: pointer;
+}
+
+.album_details p {
+    color: white;
+    font-size: 16px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.album_details:hover{
+    animation: bouncing 0.5s 0.1s; 
+}
+
+@keyframes bouncing {
+    from, to { transform: scale(1, 1); }
+    25% { transform: scale(0.9, 1.1); }
+    50% { transform: scale(1.1, 0.9); }
+    75% { transform: scale(0.95, 1.05); }
+}

@@ -6,7 +6,6 @@ import yt_dlp
 
 client_id="8ecad3e814e64a80861d1b09aaeb59ed"
 client_secret="1acef6001eb64d1980d1749c71005977"
-print(client_secret)
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="http://localhost:8888/callback",
@@ -57,5 +56,5 @@ def download_song(artist: str, song: str):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([best_url])
 
-
-download_song("Logic", "Heard Em Say")
+get_album("Logic ", "No Pressure")
+# download_song("Logic", "Heard Em Say")

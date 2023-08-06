@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -6,6 +7,7 @@ from youtube_search import YoutubeSearch
 import yt_dlp
 
 app = Flask(__name__)
+CORS(app)
 
 client_id="8ecad3e814e64a80861d1b09aaeb59ed"
 client_secret="1acef6001eb64d1980d1749c71005977"
@@ -15,7 +17,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                redirect_uri="http://localhost:8888/callback",
                                                scope="user-library-read"))
 
-def get_artist_id(artistName: str):
+def get_id(artistName: str):
     """This function retrieves artist's ID"""
     searchID = sp.search(q='artist:' + artistName, type='artist')
     ID = searchID['artists']['items'][0]['id']
@@ -28,18 +30,18 @@ def get_artist_id(artistName: str):
 #     if ID:
 #         return jsonify(ID), 200
 
-@app.route("/Albums/<artist>/<album>")
-def get_album(artist, album):
+@app.route("/<artist>")
+def get_album(artist):
     """This function retrieves songs from an album"""
-    ID = get_artist_id(artist)
+    ID = get_id(artist)
     results = sp.artist_albums(ID, album_type='album')
     albums = results['items']
+    i = 0
     for x in albums:
-        if x['name'] == album:
-            tracks = sp.album_tracks(x['id'])
-            return jsonify(tracks)
-            # for track in tracks['items']:
-            #     return jsonify(track)
+        tracks = sp.album_tracks(x['id'])
+        albums[i]['tracks'] = tracks
+        i += 1
+    return jsonify(albums)
 
 
 @app.route("/Songs/<artist>/<song>")
@@ -71,4 +73,4 @@ def download_song(artist: str, song: str):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='localhost', port=3001)
