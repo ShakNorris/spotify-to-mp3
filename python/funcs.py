@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -55,8 +55,10 @@ def get_song(artist, song):
     # for track in tracks:
     #     print(track['artists'][0]['name'] + ' - ' + track['name'])
 
+@cross_origin
+@app.route("/download/<artist>/<song>")
 def download_song(artist: str, song: str):
-    results = YoutubeSearch(f"{artist} - {song}", max_results=1).to_dict()
+    results = YoutubeSearch(f"{artist} - {song} official", max_results=1).to_dict()
     print(results[0]['url_suffix'])
     best_url = f"https://www.youtube.com/{results[0]['url_suffix']}"
 
@@ -67,9 +69,15 @@ def download_song(artist: str, song: str):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
+        "quiet":    True,
+        "simulate": True,
+        "forceurl": True,
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([best_url])
+        url = ydl.extract_info(best_url)
+        response = jsonify(url["url"])
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ import {
   Pagination,
   Table,
 } from "@nextui-org/react";
+import axios from "axios";
 
 function Main() {
   const [visible, setVisible] = useState(false);
@@ -16,6 +17,7 @@ function Main() {
   const [search, setSearch] = useState("");
   const [albumData, setAlbumData] = useState([]);
   const [clickedAlbum, setClickedAlbum] = useState("");
+  const [downloadSong, setDownloadSong] = useState({});
 
   const closeHandler = () => {
     setVisible(false);
@@ -30,12 +32,22 @@ function Main() {
     }
   };
 
+  const Download = () => {
+    clickedAlbum.tracks.items.map((track) =>
+      axios
+        .get(`http://localhost:3001/download/${search}/${track.name}`)
+        .then((response) => (
+          downloadSong[`${track.name}`] = response.data
+        ))
+    );
+    console.log(downloadSong)
+  };
+
   function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
-  
 
   return (
     <>
@@ -86,6 +98,9 @@ function Main() {
             <Modal.Body>
               <div>
                 <img src={clickedAlbum.images[1].url} width="300px" />
+                <Button onPress={Download} auto color="success">
+                  Get Album
+                </Button>
                 <div className="album_tracks">
                   <Table
                     aria-label="Example table with static content"
@@ -98,13 +113,30 @@ function Main() {
                       <Table.Column>#</Table.Column>
                       <Table.Column>Track Name</Table.Column>
                       <Table.Column>Track Length</Table.Column>
+                      <Table.Column>Download</Table.Column>
                     </Table.Header>
                     <Table.Body>
                       {clickedAlbum.tracks.items.map((track, index) => (
                         <Table.Row>
                           <Table.Cell>{index + 1}</Table.Cell>
                           <Table.Cell>{track.name}</Table.Cell>
-                          <Table.Cell>{millisToMinutesAndSeconds(track.duration_ms)}</Table.Cell>
+                          <Table.Cell>
+                            {millisToMinutesAndSeconds(track.duration_ms)}
+                          </Table.Cell>
+                          {downloadSong == 'x' ? (
+                            <Table.Cell>x</Table.Cell>
+                          ) : (
+                            <Table.Cell>
+                              <a
+                                href={downloadSong[`${track.name}`]}
+                                download={downloadSong[`${track.name}`]}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {downloadSong[`${track.name}`]}
+                              </a>
+                            </Table.Cell>
+                          )}
                         </Table.Row>
                       ))}
                     </Table.Body>
