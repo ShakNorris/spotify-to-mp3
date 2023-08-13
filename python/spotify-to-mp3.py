@@ -56,5 +56,4 @@ def download_song(artist: str, song: str):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([best_url])
 
-get_album("Logic ", "No Pressure")
-# download_song("Logic", "Heard Em Say")
+download_song("Logic", "Heard Em Say")

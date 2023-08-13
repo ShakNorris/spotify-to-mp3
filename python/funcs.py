@@ -69,13 +69,11 @@ def download_song(artist: str, song: str):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        "quiet":    True,
-        "simulate": True,
-        "forceurl": True,
+        'outtmpl': '/Users/shaknorris/Downloads/%(title)s.%(ext)s',
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         url = ydl.extract_info(best_url)
-        response = jsonify(url["url"])
+        response = jsonify(url)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 

@@ -1,14 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@nextui-org/react";
 import "./Main.css";
-import {
-  Modal,
-  useModal,
-  Text,
-  Button,
-  Pagination,
-  Table,
-} from "@nextui-org/react";
+import { Modal, Text, Button, Table } from "@nextui-org/react";
 import axios from "axios";
 
 function Main() {
@@ -17,7 +10,6 @@ function Main() {
   const [search, setSearch] = useState("");
   const [albumData, setAlbumData] = useState([]);
   const [clickedAlbum, setClickedAlbum] = useState("");
-  const [downloadSong, setDownloadSong] = useState({});
 
   const closeHandler = () => {
     setVisible(false);
@@ -34,13 +26,12 @@ function Main() {
 
   const Download = () => {
     clickedAlbum.tracks.items.map((track) =>
-      axios
-        .get(`http://localhost:3001/download/${search}/${track.name}`)
-        .then((response) => (
-          downloadSong[`${track.name}`] = response.data
-        ))
+      axios.get(`http://localhost:3001/download/${search}/${track.name}`)
     );
-    console.log(downloadSong)
+  };
+
+  const song_link = (track) => {
+    axios.get(`http://localhost:3001/download/${search}/${track}`);
   };
 
   function millisToMinutesAndSeconds(millis) {
@@ -123,20 +114,29 @@ function Main() {
                           <Table.Cell>
                             {millisToMinutesAndSeconds(track.duration_ms)}
                           </Table.Cell>
-                          {downloadSong == 'x' ? (
-                            <Table.Cell>x</Table.Cell>
+                          <Table.Cell>
+                            <Button
+                              onPress={() => song_link(track.name)}
+                              auto
+                              color="success"
+                            >
+                              Get Song
+                            </Button>
+                          </Table.Cell>
+                          {/* {displaySongs[`${track.name}`] == null ? (
+                            <Table.Cell>--------</Table.Cell>
                           ) : (
                             <Table.Cell>
                               <a
-                                href={downloadSong[`${track.name}`]}
-                                download={downloadSong[`${track.name}`]}
+                                href={displaySongs[`${track.name}`]}
+                                download={displaySongs[`${track.name}`]}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                {downloadSong[`${track.name}`]}
+                                {displaySongs[`${track.name}`]}
                               </a>
                             </Table.Cell>
-                          )}
+                          )} */}
                         </Table.Row>
                       ))}
                     </Table.Body>
