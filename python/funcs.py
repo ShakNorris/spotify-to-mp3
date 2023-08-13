@@ -5,6 +5,12 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from youtube_search import YoutubeSearch
 import yt_dlp
+import os
+
+if os.name == "nt":
+    DOWNLOAD_FOLDER = f"{os.getenv('USERPROFILE')}\\Downloads\%(title)s.%(ext)s"
+else:  #For Mac/UNix systems
+    DOWNLOAD_FOLDER = f"{os.getenv('HOME')}/Downloads/%(title)s.%(ext)s"
 
 app = Flask(__name__)
 CORS(app)
@@ -69,7 +75,7 @@ def download_song(artist: str, song: str):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        'outtmpl': '/Users/shaknorris/Downloads/%(title)s.%(ext)s',
+        'outtmpl': DOWNLOAD_FOLDER
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         url = ydl.extract_info(best_url)
