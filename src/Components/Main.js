@@ -43,9 +43,9 @@ function Main() {
   return (
     <>
       <div className="search">
+        <p>Spotify Downloader</p>
         <Input
           clearable
-          underlined
           labelPlaceholder="Search"
           status="success"
           width="500px"
@@ -74,12 +74,11 @@ function Main() {
       {clickedAlbum && (
         <div>
           <Modal
-            closeButton
             blur
             aria-labelledby="modal-title"
             open={visible}
             onClose={closeHandler}
-            width="500px"
+            width="1000px"
           >
             <Modal.Header>
               <Text id="modal-title" size={18}>
@@ -87,17 +86,19 @@ function Main() {
               </Text>
             </Modal.Header>
             <Modal.Body>
-              <div>
-                <img src={clickedAlbum.images[1].url} width="300px" />
-                <Button onPress={Download} auto color="success">
-                  Get Album
-                </Button>
+              <div className="album_info">
+                <div className="album_cover">
+                  <img src={clickedAlbum.images[1].url} width="300px" />
+                  <Button onPress={Download} auto color="success">
+                    Download The Album
+                  </Button>
+                </div>
                 <div className="album_tracks">
                   <Table
                     aria-label="Example table with static content"
                     css={{
-                      height: "auto",
-                      minWidth: "100%",
+                      height: 'auto',
+                      width: "600px",
                     }}
                   >
                     <Table.Header>
@@ -120,26 +121,19 @@ function Main() {
                               auto
                               color="success"
                             >
-                              Get Song
+                              Download
                             </Button>
                           </Table.Cell>
-                          {/* {displaySongs[`${track.name}`] == null ? (
-                            <Table.Cell>--------</Table.Cell>
-                          ) : (
-                            <Table.Cell>
-                              <a
-                                href={displaySongs[`${track.name}`]}
-                                download={displaySongs[`${track.name}`]}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {displaySongs[`${track.name}`]}
-                              </a>
-                            </Table.Cell>
-                          )} */}
                         </Table.Row>
                       ))}
                     </Table.Body>
+                    <Table.Pagination
+                      shadow
+                      noMargin
+                      align="center"
+                      rowsPerPage={5}
+                      onPageChange={(page) => console.log({ page })}
+                    />
                   </Table>
                 </div>
               </div>

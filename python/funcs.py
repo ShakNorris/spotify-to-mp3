@@ -13,10 +13,11 @@ else:  #For Mac/UNix systems
     DOWNLOAD_FOLDER = f"{os.getenv('HOME')}/Downloads/%(title)s.%(ext)s"
 
 app = Flask(__name__)
+app.config.from_pyfile('settings.py')
 CORS(app)
 
-client_id="8ecad3e814e64a80861d1b09aaeb59ed"
-client_secret="1acef6001eb64d1980d1749c71005977"
+client_id=app.config['CLIENT_ID']
+client_secret=app.config['CLIENT_SECRET']
 print(client_secret)
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,

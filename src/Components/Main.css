@@ -1,5 +1,9 @@
 .search{
-    margin-top: 30px;
+    margin-top: 40px;
+    color: #1DB954;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: monospace;
 }
 
 .details{
@@ -20,6 +24,20 @@
 
 .albums{
     padding:20px;
+}
+
+.album_info{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.album_cover img{
+    margin-bottom:20px;
+}
+
+.album_cover > * {
+    text-align: center;
 }
 
 .album_details{
