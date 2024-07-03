@@ -4,8 +4,8 @@ from spotipy.oauth2 import SpotifyOAuth
 from youtube_search import YoutubeSearch
 import yt_dlp
 
-client_id="8ecad3e814e64a80861d1b09aaeb59ed"
-client_secret="1acef6001eb64d1980d1749c71005977"
+client_id=""
+client_secret=""
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="http://localhost:8888/callback",
